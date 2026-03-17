@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snack Wembley - Delicious Fast Food</title>
+  <meta name="description" content="Snack Wembley - Fast food moderne, tacos, pizza, burgers, shawarma et plus." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --red:#e11d2f;
+      --red-dark:#b80f24;
+      --yellow:#ffd233;
+      --yellow-soft:#fff4bf;
+      --white:#ffffff;
+      --dark:#1f2937;
+      --muted:#6b7280;
+      --shadow:0 10px 30px rgba(17,24,39,.12);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Poppins',sans-serif;
+      background:#fffdf8;
+      color:var(--dark);
+      overflow-x:hidden;
+    }
+    .container{width:min(1200px,calc(100% - 32px));margin:auto}
+    .glass{
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      border:none;border-radius:999px;padding:14px 22px;font-weight:700;
+      transition:.3s ease;cursor:pointer;text-decoration:none;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--red),#ff4d4d);color:#fff;box-shadow:0 10px 25px rgba(225,29,47,.28)}
+    .btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 30px rgba(225,29,47,.35)}
+    .btn-secondary{background:linear-gradient(135deg,var(--yellow),#ffea8a);color:#111827;box-shadow:0 10px 25px rgba(255,210,51,.35)}
+    .btn-secondary:hover{transform:translateY(-2px) scale(1.02)}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
+      background:#fff7d3;color:#7c5c00;font-weight:600;font-size:.9rem;
+    }
+    .section-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05}
+    .section-sub{color:var(--muted);max-width:720px}
+    .header-shadow{box-shadow:0 8px 30px rgba(0,0,0,.06)}
+    .nav-link{
+      position:relative;color:#374151;text-decoration:none;font-weight:600;
+      transition:.25s ease;padding:8px 0
+    }
+    .nav-link:after{
+      content:"";position:absolute;left:0;bottom:0;width:0;height:3px;background:var(--red);
+      border-radius:999px;transition:.25s ease
+    }
+    .nav-link:hover{color:var(--red)}
+    .nav-link:hover:after{width:100%}
+    .hero{
+      min-height:100svh;
+      background:
+      linear-gradient(90deg, rgba(17,24,39,.78) 0%, rgba(17,24,39,.45) 45%, rgba(17,24,39,.15) 100%),
+      url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";position:absolute;inset:auto -10% -15% auto;width:360px;height:360px;border-radius:50%;
+      background:radial-gradient(circle, rgba(255,210,51,.38), transparent 65%);
+      filter:blur(10px);animation:float 6s ease-in-out infinite;
+    }
+    .hero-card{
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);
+      box-shadow:var(--shadow);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)
+    }
+    .logo-mark{
+      width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--yellow),#ffb100);
+      display:grid;place-items:center;box-shadow:0 10px 24px rgba(255,178,0,.35)
+    }
+    .logo-mark svg{width:34px;height:34px}
+    .menu-filter{
+      border:1px solid #f2e7b5;background:#fff;border-radius:999px;padding:10px 16px;
+      font-weight:600;transition:.25s ease;white-space:nowrap
+    }
+    .menu-filter:hover,.menu-filter.active{background:var(--red);color:#fff;border-color:var(--red);transform:translateY(-2px)}
+    .category-card,.review-card,.map-card,.info-card{
+      background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden
+    }
+    .category-img{
+      width:100%;height:220px;object-fit:cover;display:block
+    }
+    .menu-item{
+      border:1px solid #f3f4f6;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;
+      transition:.28s ease;background:linear-gradient(180deg,#fff,#fffdf8)
+    }
+    .menu-item:hover{transform:translateY(-4px);box-shadow:0 12px 25px rgba(0,0,0,.08);border-color:#fde68a}
+    .price{font-weight:800;color:var(--red)}
+    .size-select,.qty-input{
+      width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;outline:none;background:#fff
+    }
+    .add-btn{
+      width:100%;padding:12px 14px;background:linear-gradient(135deg,var(--yellow),#ffe57a);
+      border:none;border-radius:14px;font-weight:800;cursor:pointer;transition:.25s ease
+    }
+    .add-btn:hover{transform:translateY(-2px);background:linear-gradient(135deg,#ffdf58,var(--yellow))}
+    .floating-cart{
+      position:fixed;right:18px;bottom:18px;z-index:70;
+      width:64px;height:64px;border-radius:999px;background:linear-gradient(135deg,var(--red),#ff3d54);
+      color:#fff;border:none;box-shadow:0 18px 40px rgba(225,29,47,.35);cursor:pointer;
+      display:grid;place-items:center;animation:pulse 2s infinite
+    }
+    .cart-count{
+      position:absolute;top:-5px;right:-1px;background:var(--yellow);color:#111827;
+      min-width:26px;height:26px;padding:0 7px;border-radius:999px;display:grid;place-items:center;font-size:.8rem;font-weight:800;border:2px solid #fff
+    }
+    .cart-panel{
+      position:fixed;top:0;right:0;width:min(420px,100%);height:100svh;background:#fff;z-index:80;
+      transform:translateX(100%);transition:.35s ease;box-shadow:-10px 0 30px rgba(0,0,0,.12);display:flex;flex-direction:column
+    }
+    .cart-panel.open{transform:translateX(0)}
+    .overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:75;opacity:0;visibility:hidden;transition:.3s ease
+    }
+    .overlay.show{opacity:1;visibility:visible}
+    .cart-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:14px;border:1px solid #f3f4f6;border-radius:16px}
+    .qty-controls button{
+      width:28px;height:28px;border:none;border-radius:8px;background:#f3f4f6;font-weight:800;cursor:pointer
+    }
+    .remove-btn{background:#fee2e2;color:#b91c1c;border:none;border-radius:10px;padding:8px 10px;cursor:pointer}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .scroll-down{
+      position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;color:#fff;gap:8px;font-size:.85rem
+    }
+    .mouse{
+      width:30px;height:50px;border:2px solid #fff;border-radius:999px;display:flex;justify-content:center;padding-top:8px
+    }
+    .mouse span{
+      width:4px;height:10px;background:#fff;border-radius:999px;animation:scrollWheel 1.5s infinite
+    }
+    .back-top{
+      position:fixed;left:18px;bottom:18px;z-index:60;width:52px;height:52px;border:none;border-radius:999px;
+      background:#111827;color:#fff;display:grid;place-items:center;box-shadow:var(--shadow);cursor:pointer;opacity:0;visibility:hidden;transition:.3s ease
+    }
+    .back-top.show{opacity:1;visibility:visible}
+    .loader{
+      position:fixed;inset:0;background:linear-gradient(135deg,#fffefb,#fff6d2);z-index:120;display:grid;place-items:center;transition:.6s ease
+    }
+    .loader.hide{opacity:0;visibility:hidden}
+    .loader-inner{display:flex;flex-direction:column;align-items:center;gap:18px}
+    .burger-spin{
+      width:84px;height:84px;border-radius:24px;background:linear-gradient(135deg,var(--yellow),#ffb703);display:grid;place-items:center;
+      box-shadow:0 20px 40px rgba(255,183,3,.35);animation:bounce 1.3s infinite
+    }
+    .footer-link{text-decoration:none;color:#4b5563}
+    .footer-link:hover{color:var(--red)}
+    .map-preview{
+      width:100%;height:320px;border:0;display:block
+    }
+    @keyframes float{50%{transform:translateY(-18px)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+    @keyframes bounce{50%{transform:translateY(-8px)}}
+    @keyframes scrollWheel{0%{opacity:0;transform:translateY(0)}50%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
+    @media (max-width: 768px){
+      .hero{min-height:92svh}
+      .category-img{height:180px}
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="burger-spin">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M14 27c1-8 8-13 18-13s17 5 18 13H14Z" fill="#EF4444"/>
+          <path d="M13 33h38c1.7 0 3 1.3 3 3s-1.3 3-3 3H13c-1.7 0-3-1.3-3-3s1.3-3 3-3Z" fill="#22C55E"/>
+          <path d="M16 39h32c1.3 0 2.4.8 2.8 1.9l1.6 4.6c.6 1.8-.7 3.5-2.6 3.5H14.2c-1.9 0-3.2-1.7-2.6-3.5l1.6-4.6c.4-1.1 1.5-1.9 2.8-1.9Z" fill="#92400E"/>
+          <circle cx="22" cy="22" r="1.3" fill="#FDE68A"/><circle cx="31" cy="19" r="1.3" fill="#FDE68A"/><circle cx="39" cy="22" r="1.3" fill="#FDE68A"/>
+        </svg>
+      </div>
+      <div class="text-center">
+        <h2 class="text-2xl font-extrabold text-gray-900 m-0">Snack Wembley</h2>
+        <p class="text-gray-500 mt-2 mb-0">Préparation du meilleur fast-food...</p>
+      </div>
+    </div>
+  </div>
+
+  <header class="fixed top-0 left-0 right-0 z-50 glass header-shadow">
+    <div class="container flex items-center justify-between py-3">
+      <a href="#home" class="flex items-center gap-3 no-underline">
+        <div class="logo-mark">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M14 27c1-8 8-13 18-13s17 5 18 13H14Z" fill="#EF4444"/>
+            <path d="M13 33h38c1.7 0 3 1.3 3 3s-1.3 3-3 3H13c-1.7 0-3-1.3-3-3s1.3-3 3-3Z" fill="#22C55E"/>
+            <path d="M16 39h32c1.3 0 2.4.8 2.8 1.9l1.6 4.6c.6 1.8-.7 3.5-2.6 3.5H14.2c-1.9 0-3.2-1.7-2.6-3.5l1.6-4.6c.4-1.1 1.5-1.9 2.8-1.9Z" fill="#92400E"/>
+            <circle cx="22" cy="22" r="1.3" fill="#FDE68A"/><circle cx="31" cy="19" r="1.3" fill="#FDE68A"/><circle cx="39" cy="22" r="1.3" fill="#FDE68A"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-lg md:text-xl font-extrabold text-gray-900 leading-none">Snack Wembley</div>
+          <div class="text-xs text-gray-500">Delicious Fast Food</div>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="nav-link" href="#menu">Menu</a>
+        <a class="nav-link" href="#cart-anchor">Cart</a>
+        <a class="nav-link" href="#location">Location</a>
+        <a class="nav-link" id="navWhatsapp" href="#">Order on WhatsApp</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button id="mobileMenuBtn" class="md:hidden w-11 h-11 rounded-full bg-white shadow grid place-items-center text-gray-800 border border-gray-100">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <button id="headerCartBtn" class="btn btn-primary text-sm py-3 px-4">
+          <i class="fa-solid fa-cart-shopping"></i><span class="hidden sm:inline">Cart</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobileMenu" class="md:hidden hidden border-t border-gray-100 bg-white">
+      <div class="container py-4 flex flex-col gap-3">
+        <a class="nav-link" href="#menu">Menu</a>
+        <a class="nav-link" href="#cart-anchor">Cart</a>
+        <a class="nav-link" href="#location">Location</a>
+        <a class="nav-link" id="mobileWhatsapp" href="#">Order on WhatsApp</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="home" class="hero flex items-center">
+    <div class="container relative z-10 pt-28 pb-24">
+      <div class="max-w-3xl text-white">
+        <div class="badge mb-5"><i class="fa-solid fa-burger"></i> Fast-food moderne à Wembley</div>
+        <div class="flex items-center gap-4 mb-6">
+          <div class="logo-mark !w-20 !h-20">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M14 27c1-8 8-13 18-13s17 5 18 13H14Z" fill="#EF4444"/>
+              <path d="M13 33h38c1.7 0 3 1.3 3 3s-1.3 3-3 3H13c-1.7 0-3-1.3-3-3s1.3-3 3-3Z" fill="#22C55E"/>
+              <path d="M16 39h32c1.3 0 2.4.8 2.8 1.9l1.6 4.6c.6 1.8-.7 3.5-2.6 3.5H14.2c-1.9 0-3.2-1.7-2.6-3.5l1.6-4.6c.4-1.1 1.5-1.9 2.8-1.9Z" fill="#92400E"/>
+              <circle cx="22" cy="22" r="1.3" fill="#FDE68A"/><circle cx="31" cy="19" r="1.3" fill="#FDE68A"/><circle cx="39" cy="22" r="1.3" fill="#FDE68A"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="m-0 text-5xl md:text-7xl font-extrabold leading-[.95]">Snack Wembley</h1>
+            <p class="mt-3 mb-0 text-lg md:text-2xl text-gray-100">Delicious Fast Food</p>
+          </div>
+        </div>
+        <p class="text-white/90 text-base md:text-lg max-w-2xl">
+          Sandwichs, tacos, pizza, burger, shawarma, jus frais et bien plus. Une expérience fast-food moderne, rapide et savoureuse.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#menu" class="btn btn-primary"><i class="fa-solid fa-bag-shopping"></i> Order Now</a>
+          <a href="https://maps.app.goo.gl/KUnvyQFvL7LXSKYW7" target="_blank" class="btn btn-secondary"><i class="fa-solid fa-location-dot"></i> Voir la localisation</a>
+        </div>
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl">
+          <div class="hero-card rounded-2xl p-4">
+            <div class="text-2xl font-extrabold text-yellow-300">9+</div>
+            <div class="text-white/85 text-sm">Catégories</div>
+          </div>
+          <div class="hero-card rounded-2xl p-4">
+            <div class="text-2xl font-extrabold text-yellow-300">50+</div>
+            <div class="text-white/85 text-sm">Choix gourmands</div>
+          </div>
+          <div class="hero-card rounded-2xl p-4 col-span-2 sm:col-span-1">
+            <div class="text-2xl font-extrabold text-yellow-300">WhatsApp</div>
+            <div class="text-white/85 text-sm">Commande rapide</div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-down">
+        <div class="mouse"><span></span></div>
+        <div>Scroll Down</div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="py-16 md:py-24 reveal">
+      <div class="container">
+        <div class="text-center">
+          <span class="badge"><i class="fa-solid fa-star"></i> Snack Wembley Experience</span>
+          <h2 class="section-title mt-5 mb-4">Un fast-food pro, rapide et gourmand</h2>
+          <p class="section-sub mx-auto">Découvrez un menu complet avec des recettes généreuses, des prix clairs et une commande facile directement via WhatsApp.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mt-12">
+          <div class="info-card p-6 reveal">
+            <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-600 grid place-items-center text-2xl mb-4"><i class="fa-solid fa-bolt"></i></div>
+            <h3 class="font-extrabold text-xl mb-2">Commande rapide</h3>
+            <p class="text-gray-500 m-0">Ajoutez vos articles au panier et commandez instantanément sur WhatsApp.</p>
+          </div>
+          <div class="info-card p-6 reveal">
+            <div class="w-14 h-14 rounded-2xl bg-yellow-100 text-yellow-600 grid place-items-center text-2xl mb-4"><i class="fa-solid fa-utensils"></i></div>
+            <h3 class="font-extrabold text-xl mb-2">Menu varié</h3>
+            <p class="text-gray-500 m-0">Sandwichs, tacos, pizza, panini, burger, shawarma et jus frais.</p>
+          </div>
+          <div class="info-card p-6 reveal">
+            <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-600 grid place-items-center text-2xl mb-4"><i class="fa-solid fa-location-dot"></i></div>
+            <h3 class="font-extrabold text-xl mb-2">Localisation facile</h3>
+            <p class="text-gray-500 m-0">Accédez rapidement à notre emplacement avec le lien Google Maps intégré.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="py-16 md:py-24 bg-gradient-to-b from-[#fff8d8] to-[#fffdf8]">
+      <div class="container">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+          <div class="reveal">
+            <span class="badge"><i class="fa-solid fa-fire"></i> Menu complet</span>
+            <h2 class="section-title mt-4 mb-3">Choisissez vos favoris</h2>
+            <p class="section-sub">Chaque catégorie affiche une image unique en tête, puis tous les produits sans images pour un affichage propre et rapide.</p>
+          </div>
+          <a href="https://maps.app.goo.gl/KUnvyQFvL7LXSKYW7" target="_blank" class="btn btn-secondary self-start md:self-auto reveal"><i class="fa-solid fa-map-location-dot"></i> Voir la localisation</a>
+        </div>
+
+        <div class="flex gap-3 overflow-auto pb-2 mb-10 reveal" id="filterBar"></div>
+
+        <div id="menuContainer" class="space-y-10"></div>
+      </div>
+    </section>
+
+    <section class="py-16 md:py-24 reveal">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="badge"><i class="fa-solid fa-heart"></i> Avis clients</span>
+          <h2 class="section-title mt-4 mb-3">Ce que disent nos clients</h2>
+          <p class="section-sub mx-auto">Une sélection d’avis inspirés par l’expérience Snack Wembley.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="review-card p-6 reveal">
+            <div class="text-yellow-400 mb-3"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+            <p class="text-gray-600">“Tacos super bons et portion généreuse. Le site est clair et la commande WhatsApp est ultra pratique.”</p>
+            <div class="font-bold mt-4">Yassine</div>
+          </div>
+          <div class="review-card p-6 reveal">
+            <div class="text-yellow-400 mb-3"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+            <p class="text-gray-600">“Pizza mixte excellente, service rapide, design moderne. Très facile de choisir les tailles.”</p>
+            <div class="font-bold mt-4">Salma</div>
+          </div>
+          <div class="review-card p-6 reveal">
+            <div class="text-yellow-400 mb-3"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i></div>
+            <p class="text-gray-600">“Les burgers et shawarma sont top. J’aime le panier flottant et l’interface responsive.”</p>
+            <div class="font-bold mt-4">Imane</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="location" class="py-16 md:py-24 bg-white reveal">
+      <div class="container">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <span class="badge"><i class="fa-solid fa-map-pin"></i> Notre emplacement</span>
+            <h2 class="section-title mt-4 mb-3">Retrouvez Snack Wembley facilement</h2>
+            <p class="section-sub mb-6">Cliquez sur le bouton pour ouvrir la localisation Google Maps et venir nous rendre visite rapidement.</p>
+            <div class="flex flex-wrap gap-4">
+              <a href="https://maps.app.goo.gl/KUnvyQFvL7LXSKYW7" target="_blank" class="btn btn-primary"><i class="fa-solid fa-location-dot"></i> Voir la localisation</a>
+              <button id="openCartFromLocation" class="btn btn-secondary"><i class="fa-solid fa-cart-shopping"></i> Ouvrir le panier</button>
+            </div>
+          </div>
+          <div class="map-card overflow-hidden reveal">
+            <iframe class="map-preview" loading="lazy" src="https://www.google.com/maps?q=Snack%20Wembley&output=embed"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="cart-anchor"></div>
+  </main>
+
+  <footer class="bg-gray-950 text-white pt-16 pb-10">
+    <div class="container">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="logo-mark">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M14 27c1-8 8-13 18-13s17 5 18 13H14Z" fill="#EF4444"/>
+                <path d="M13 33h38c1.7 0 3 1.3 3 3s-1.3 3-3 3H13c-1.7 0-3-1.3-3-3s1.3-3 3-3Z" fill="#22C55E"/>
+                <path d="M16 39h32c1.3 0 2.4.8 2.8 1.9l1.6 4.6c.6 1.8-.7 3.5-2.6 3.5H14.2c-1.9 0-3.2-1.7-2.6-3.5l1.6-4.6c.4-1.1 1.5-1.9 2.8-1.9Z" fill="#92400E"/>
+                <circle cx="22" cy="22" r="1.3" fill="#FDE68A"/><circle cx="31" cy="19" r="1.3" fill="#FDE68A"/><circle cx="39" cy="22" r="1.3" fill="#FDE68A"/>
+              </svg>
+            </div>
+            <div>
+              <div class="font-extrabold text-xl">Snack Wembley</div>
+              <div class="text-sm text-gray-400">Delicious Fast Food</div>
+            </div>
+          </div>
+          <p class="text-gray-400">Votre adresse fast-food moderne pour tacos, pizza, burger, shawarma, sandwichs et jus.</p>
+        </div>
+        <div>
+          <h4 class="font-extrabold mb-4">Navigation</h4>
+          <div class="space-y-3">
+            <a class="footer-link block" href="#home">Accueil</a>
+            <a class="footer-link block" href="#menu">Menu</a>
+            <a class="footer-link block" href="#location">Location</a>
+            <a class="footer-link block" href="#" id="footerWhatsapp">Commander sur WhatsApp</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-extrabold mb-4">Contact</h4>
+          <div class="space-y-3 text-gray-400">
+            <div><i class="fa-brands fa-whatsapp text-green-400 mr-2"></i> WhatsApp disponible</div>
+            <div><i class="fa-solid fa-location-dot text-red-400 mr-2"></i> Snack Wembley</div>
+            <div><i class="fa-solid fa-clock text-yellow-300 mr-2"></i> Service rapide</div>
+          </div>
+        </div>
+        <div>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-6 text-center text-gray-400 text-sm">
+        © 2026 Snack Wembley. Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+
+  <button class="floating-cart" id="floatingCartBtn" aria-label="Open cart">
+    <i class="fa-solid fa-cart-shopping text-xl"></i>
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+
+  <button class="back-top" id="backTop" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="cart-panel" id="cartPanel">
+    <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+      <div>
+        <h3 class="text-2xl font-extrabold m-0">Votre Panier</h3>
+        <p class="text-gray-500 text-sm mt-1 mb-0">Vérifiez vos articles avant la commande.</p>
+      </div>
+      <button id="closeCartBtn" class="w-11 h-11 rounded-full bg-gray-100 hover:bg-gray-200 transition border-0">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="p-5 flex-1 overflow-auto">
+      <div id="cartItems" class="space-y-3"></div>
+      <div id="emptyCart" class="text-center py-16 text-gray-400">
+        <i class="fa-solid fa-cart-shopping text-4xl mb-4"></i>
+        <div class="font-semibold">Votre panier est vide</div>
+        <p class="text-sm">Ajoutez des produits depuis le menu.</p>
+      </div>
+    </div>
+    <div class="p-5 border-t border-gray-100 space-y-4 bg-white">
+      <div class="flex items-center justify-between text-lg">
+        <span class="font-semibold">Total</span>
+        <span class="font-extrabold text-red-600" id="cartTotal">0 Dh</span>
+      </div>
+      <button id="checkoutBtn" class="btn btn-primary w-full">
+        <i class="fa-brands fa-whatsapp"></i> Commander
+      </button>
+    </div>
+  </aside>
+
+  <script>
+    const whatsappNumber = "212605677157";
+    const mapLink = "https://maps.app.goo.gl/KUnvyQFvL7LXSKYW7";
+
+    const menuData = [
+      {
+        id:"sandwichs-froids",
+        title:"Sandwichs Froids",
+        image:"https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=1200&q=80",
+        items:[
+          {name:"Sandwich Normal", price:12},
+          {name:"Sandwich Normal + Fromage", price:14},
+          {name:"Sandwich Normal + Oeuf", price:14},
+          {name:"Sandwich Normal + Oeuf + Fromage", price:15},
+          {name:"Tortilla", price:15},
+          {name:"Panini Thon", price:12},
+          {name:"Sandwich Wembley (cacher + fromage + oeuf)", price:10},
+          {name:"Sandwich Wembley + Frite", price:12},
+          {name:"Salade", price:17}
+        ]
+      },
+      {
+        id:"sandwichs-chauds",
+        title:"Sandwichs Chauds",
+        image:"https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=1200&q=80",
+        items:[
+          {name:"Sandwich Nugget", price:15},
+          {name:"Sandwich Chicken", price:15},
+          {name:"Sandwich Viande Hachée", price:18},
+          {name:"Sandwich VH Oeuf", price:20},
+          {name:"Sandwich VH Oeuf Fromage", price:22},
+          {name:"Sandwich Dinde", price:18},
+          {name:"Sandwich Dinde Oeuf", price:20},
+          {name:"Sandwich Dinde Oeuf Fromage", price:22},
+          {name:"Sandwich Mixte", price:20},
+          {name:"Sandwich Mixte Oeuf + Fromage", price:24},
+          {name:"Sandwich Crevette Oeuf + Fromage", price:28}
+        ]
+      },
+      {
+      id:"plats",
+        title:"Plats",
+        image:"https://i.postimg.cc/28RMND1X/97c780039aa7c92d31a67c1d702d2fa6.jpg'",
+        items:[
+          {name:"Plats Dinde ", price:30},
+          {name:"Plats Viande Hachée", price:30},
+          {name:"Plats Mixte", price:30},
+        ]
+      },
+      {
+        id:"tacos",
+        title:"Tacos",
+        image:"https://i.postimg.cc/QdZ6wkn4/3f1ba88a8461086579ed5a51c067e021.jpg'",
+        items:[
+          {name:"Chicken", sizes:{Normal:25, Large:30}},
+          {name:"Nugget", sizes:{Normal:25, Large:30}},
+          {name:"Dinde", sizes:{Normal:25, Large:30}},
+          {name:"Viande Hachée", sizes:{Normal:30, Large:35}},
+          {name:"Mixte", sizes:{Normal:30, Large:35}},
+          {name:"Cordon Bleu", sizes:{Normal:35, Large:40}},
+          {name:"Fruits de Mer", sizes:{Normal:40, Large:45}}
+        ]
+      },
+      {
+        id:"panini",
+        title:"Panini",
+        image:"https://images.pexels.com/photos/32715053/pexels-photo-32715053.jpeg?auto=compress&cs=tinysrgb&w=600",
+        items:[
+          {name:"Nugget", price:18},
+          {name:"Dinde", price:18},
+          {name:"Viande Hachée", price:18},
+          {name:"Mixte", price:20}
+        ]
+      },
+      {
+        id:"pizza",
+        title:"Pizza",
+        image:"https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
+        items:[
+          {name:"Margarita", sizes:{Small:20, Medium:25, Large:35}},
+          {name:"Thon", sizes:{Small:25, Medium:30, Large:40}},
+          {name:"Viande Hachée", sizes:{Small:30, Medium:40, Large:50}},
+          {name:"Dinde", sizes:{Small:30, Medium:40, Large:50}},
+          {name:"Mixte", sizes:{Small:30, Medium:40, Large:50}},
+          {name:"Fruits de Mer", sizes:{Small:30, Medium:40, Large:50}}
+        ]
+      },
+      {
+        id:"panzerotti",
+        title:"Panzerotti",
+        image:"https://i.postimg.cc/6q1kC2WN/9156cac1a5f65ba932e454a2720c8066.jpg'",
+        items:[
+          {name:"Dinde", price:30},
+          {name:"V.H", price:30},
+          {name:"Mixte", price:35},
+          {name:"Fruits de Mer", price:40}
+        ]
+      },
+      {
+        id:"pasticcio",
+        title:"Pasticcio",
+        image:"https://i.postimg.cc/3Rq1BgvS/7f5d0fc31c2a4d9495342af60ba870c4.jpg'",
+        items:[
+          {name:"Dinde", price:30},
+          {name:"V. Hachée", price:30},
+          {name:"Mixte", price:35},
+          {name:"Cordon Bleu", price:35},
+          {name:"Fruits de Mer", price:40}
+        ]
+      },
+      {
+        id:"shawarma",
+        title:"Shawarma",
+        image:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=1200&q=80",
+        items:[
+          {name:"Shawarma", price:20},
+          {name:"Shawarma Double", price:30}
+        ]
+      },
+      {
+        id:"burger",
+        title:"Burger",
+        image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=80",
+        items:[
+          {name:"Hamburger", price:20},
+          {name:"Burger Chicken", price:20},
+          {name:"Big Burger", price:30}
+        ]
+      },
+      {
+        id:"jus",
+        title:"Jus",
+        image:"https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=1200&q=80",
+        items:[
+          {name:"Jus de Banane", price:8},
+          {name:"Jus de Pomme", price:8},
+          {name:"Jus de Citron", price:6},
+          {name:"Jus d’Orange", price:10},
+          {name:"Jus d’Avocat", price:14},
+          {name:"Jus Panaché", price:12},
+          {name:"Boisson", price:6},
+          {name:"Eau Minérale", price:4}
+        ]
+      }
+    ];
+
+    const menuContainer = document.getElementById("menuContainer");
+    const filterBar = document.getElementById("filterBar");
+    let cart = [];
+
+    function formatPrice(v){ return `${v} Dh`; }
+
+    function getPriceDisplay(item){
+      if(item.sizes){
+        const values = Object.values(item.sizes);
+        return `${Math.min(...values)} / ${Math.max(...values)} Dh`;
+      }
+      return formatPrice(item.price);
+    }
+
+    function renderFilters(){
+      const allBtn = document.createElement("button");
+      allBtn.className = "menu-filter active";
+      allBtn.textContent = "Tous";
+      allBtn.onclick = () => {
+        document.querySelectorAll(".category-section").forEach(el => el.style.display = "block");
+        document.querySelectorAll(".menu-filter").forEach(b => b.classList.remove("active"));
+        allBtn.classList.add("active");
+      };
+      filterBar.appendChild(allBtn);
+
+      menuData.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.className = "menu-filter";
+        btn.textContent = cat.title;
+        btn.onclick = () => {
+          document.querySelectorAll(".category-section").forEach(el => el.style.display = "none");
+          document.getElementById(cat.id).style.display = "block";
+          document.getElementById(cat.id).scrollIntoView({behavior:"smooth", block:"start"});
+          document.querySelectorAll(".menu-filter").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        };
+        filterBar.appendChild(btn);
+      });
+    }
+
+    function renderMenu(){
+      menuContainer.innerHTML = menuData.map(cat => `
+        <section class="category-section reveal" id="${cat.id}">
+          <div class="category-card">
+            <img class="category-img" src="${cat.image}" alt="${cat.title}">
+            <div class="p-5 md:p-7 border-b border-gray-100 bg-white">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div>
+                  <h3 class="text-2xl md:text-3xl font-extrabold m-0">${cat.title}</h3>
+                  <p class="text-gray-500 mt-2 mb-0">Découvrez nos spécialités ${cat.title.toLowerCase()}.</p>
+                </div>
+                <span class="badge"><i class="fa-solid fa-bowl-food"></i> ${cat.items.length} articles</span>
+              </div>
+            </div>
+            <div class="p-5 md:p-7">
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${cat.items.map((item, idx) => `
+                  <div class="menu-item">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <h4 class="font-extrabold text-lg leading-tight mb-1">${item.name}</h4>
+                        <div class="price">${getPriceDisplay(item)}</div>
+                      </div>
+                      <div class="w-11 h-11 rounded-xl bg-red-50 text-red-600 grid place-items-center shrink-0">
+                        <i class="fa-solid fa-plus"></i>
+                      </div>
+                    </div>
+                    ${item.sizes ? `
+                      <select class="size-select" id="size-${cat.id}-${idx}">
+                        ${Object.keys(item.sizes).map(s => `<option value="${s}">${s} - ${item.sizes[s]} Dh</option>`).join("")}
+                      </select>
+                    ` : ""}
+                    <button class="add-btn" onclick="addToCart('${cat.title.replace(/'/g,"\\'")}', '${item.name.replace(/'/g,"\\'")}', ${item.price || 'null'}, ${item.sizes ? JSON.stringify(item.sizes).replace(/"/g, '&quot;') : 'null'}, '${cat.id}', ${idx})">
+                      Ajouter au panier
+                    </button>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+        </section>
+      `).join("");
+      observeReveals();
+    }
+
+    function addToCart(category, name, basePrice, sizes, catId, idx){
+      let selectedSize = null;
+      let price = basePrice;
+
+      if(sizes){
+        const select = document.getElementById(`size-${catId}-${idx}`);
+        selectedSize = select.value;
+        const parsedSizes = typeof sizes === "string" ? JSON.parse(sizes.replace(/&quot;/g,'"')) : sizes;
+        price = parsedSizes[selectedSize];
+      }
+
+      const cartName = `${category} - ${name}`;
+      const existing = cart.find(item => item.name === cartName && item.size === selectedSize);
+
+      if(existing){
+        existing.qty += 1;
+      }else{
+        cart.push({
+          name: cartName,
+          displayName: name,
+          category,
+          size: selectedSize,
+          price,
+          qty:1
+        });
+      }
+
+      renderCart();
+      openCart();
+      animateCartCount();
+    }
+
+    function renderCart(){
+      const cartItems = document.getElementById("cartItems");
+      const emptyCart = document.getElementById("emptyCart");
+      const cartTotal = document.getElementById("cartTotal");
+      const cartCount = document.getElementById("cartCount");
+
+      if(cart.length === 0){
+        cartItems.innerHTML = "";
+        emptyCart.style.display = "block";
+      }else{
+        emptyCart.style.display = "none";
+        cartItems.innerHTML = cart.map((item, index) => `
+          <div class="cart-item">
+            <div>
+              <div class="font-bold">${item.displayName}${item.size ? ` (${item.size})` : ""}</div>
+              <div class="text-sm text-gray-500">${item.category}</div>
+              <div class="text-red-600 font-extrabold mt-1">${item.price} Dh</div>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+              <div class="qty-controls flex items-center gap-2">
+                <button onclick="changeQty(${index}, -1)">-</button>
+                <span class="font-bold">${item.qty}</span>
+                <button onclick="changeQty(${index}, 1)">+</button>
+              </div>
+              <button class="remove-btn" onclick="removeItem(${index})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+
+      cartTotal.textContent = `${total} Dh`;
+      cartCount.textContent = count;
+    }
+
+    function changeQty(index, delta){
+      cart[index].qty += delta;
+      if(cart[index].qty <= 0) cart.splice(index, 1);
+      renderCart();
+      animateCartCount();
+    }
+
+    function removeItem(index){
+      cart.splice(index, 1);
+      renderCart();
+      animateCartCount();
+    }
+
+    function buildWhatsAppMessage(){
+      if(cart.length === 0){
+        return "Bonjour, je veux commander.";
+      }
+      const lines = cart.map(item => `${item.qty} ${item.displayName}${item.size ? ` (${item.size})` : ""}`);
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      return `Bonjour, je veux commander :\n${lines.join("\n")}\nTotal : ${total} Dh`;
+    }
+
+    function checkoutWhatsApp(){
+      const text = encodeURIComponent(buildWhatsAppMessage());
+      window.open(`https://wa.me/${whatsappNumber}?text=${text}`, "_blank");
+    }
+
+    function openCart(){
+      document.getElementById("cartPanel").classList.add("open");
+      document.getElementById("overlay").classList.add("show");
+    }
+
+    function closeCart(){
+      document.getElementById("cartPanel").classList.remove("open");
+      document.getElementById("overlay").classList.remove("show");
+    }
+
+    function animateCartCount(){
+      const badge = document.getElementById("cartCount");
+      badge.animate([
+        {transform:"scale(1)"},
+        {transform:"scale(1.35)"},
+        {transform:"scale(1)"}
+      ], {duration:300, easing:"ease"});
+    }
+
+    function observeReveals(){
+      const items = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      }, {threshold:0.12});
+      items.forEach(el=>io.observe(el));
+    }
+
+    document.getElementById("floatingCartBtn").onclick = openCart;
+    document.getElementById("headerCartBtn").onclick = openCart;
+    document.getElementById("openCartFromLocation").onclick = openCart;
+    document.getElementById("closeCartBtn").onclick = closeCart;
+    document.getElementById("overlay").onclick = closeCart;
+    document.getElementById("checkoutBtn").onclick = checkoutWhatsApp;
+
+    function genericWhatsApp(){
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Bonjour Snack Wembley, je souhaite passer une commande.")}`, "_blank");
+    }
+    document.getElementById("navWhatsapp").onclick = (e)=>{e.preventDefault();genericWhatsApp();};
+    document.getElementById("mobileWhatsapp").onclick = (e)=>{e.preventDefault();genericWhatsApp();};
+    document.getElementById("footerWhatsapp").onclick = (e)=>{e.preventDefault();genericWhatsApp();};
+
+    document.getElementById("mobileMenuBtn").onclick = ()=>{
+      document.getElementById("mobileMenu").classList.toggle("hidden");
+    };
+
+    const backTop = document.getElementById("backTop");
+    backTop.onclick = ()=> window.scrollTo({top:0, behavior:"smooth"});
+
+    window.addEventListener("scroll", ()=>{
+      if(window.scrollY > 500) backTop.classList.add("show");
+      else backTop.classList.remove("show");
+    });
+
+    window.addEventListener("load", ()=>{
+      setTimeout(()=>document.getElementById("loader").classList.add("hide"), 900);
+    });
+
+    renderFilters();
+    renderMenu();
+    renderCart();
+  </script>
+</body>
+</html>
